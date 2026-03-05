@@ -7,14 +7,15 @@ import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/api")
-public class OperationController {
+public class ArticleController {
 
-    @GetMapping("/processed-numbers")
-    public Flux<String> getProcessedNumbers() {
+    @GetMapping("/articles")
+    public Flux<String> getArticles() {
 
-        return Flux.range(1, 10)
-                .filter(n -> n % 2 == 0)
-                .map(n -> n * 10)
-                .map(n -> "\nProcessed: " + n);
+        return Flux.just(
+                "Introduction to Spring WebFlux",
+                "Reactive Programming with Project Reactor",
+                "Building APIs with Spring Boot"
+        );
     }
 }
