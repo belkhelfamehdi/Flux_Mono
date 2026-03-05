@@ -12,7 +12,7 @@ public class BasicController {
 
     @GetMapping("/welcome")
     public Mono<String> welcome() {
-        return Mono.just("Welcome to Project Reactor!");
+        return Mono.just("Welcome to Project Reactor !");
     }
 
     @GetMapping("/numbers")
