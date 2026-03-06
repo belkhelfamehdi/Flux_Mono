@@ -1,23 +1,19 @@
-package org.example.flux_mono.controller;
+package org.example.flux_mono.exercice1;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api")
-public class BasicController {
+public class Exercice1Controller {
 
-    @GetMapping("/welcome")
-    public Mono<String> welcome() {
-        return Mono.just("Welcome to Project Reactor !");
-    }
-
-    @GetMapping("/numbers")
+    @GetMapping("/exercice1/numbers")
     public Flux<Integer> numbers() {
-        return Flux.range(1, 5);
+        return Flux.range(1, 10)
+                .map(number -> number * 3)
+                .filter(number -> number > 15)
+                .doOnNext(System.out::println);
     }
-
 }
