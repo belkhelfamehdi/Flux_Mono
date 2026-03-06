@@ -38,15 +38,19 @@ public class UserController {
 
     @PostMapping
     public Mono<ResponseEntity<User>> createUser(@RequestBody User user) {
-        return userService.create(user)
-                .map(created -> ResponseEntity.status(HttpStatus.CREATED).body(created));
+        return Mono.defer(() -> userService.create(user))
+            .map(created -> ResponseEntity.status(HttpStatus.CREATED).body(created))
+            .onErrorResume(IllegalArgumentException.class,
+                ex -> Mono.just(ResponseEntity.badRequest().build()));
     }
 
     @PutMapping("/{id}")
     public Mono<ResponseEntity<User>> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.update(id, user)
+        return Mono.defer(() -> userService.update(id, user))
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+            .defaultIfEmpty(ResponseEntity.notFound().build())
+            .onErrorResume(IllegalArgumentException.class,
+                ex -> Mono.just(ResponseEntity.badRequest().build()));
     }
 
     @DeleteMapping("/{id}")

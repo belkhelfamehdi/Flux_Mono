@@ -23,11 +23,13 @@ public class UserService {
     }
 
     public Mono<User> create(User user) {
+        validate(user);
         user.setId(null);
         return userRepository.save(user);
     }
 
     public Mono<User> update(Long id, User user) {
+        validate(user);
         return userRepository.findById(id)
                 .flatMap(existing -> {
                     existing.setName(user.getName());
@@ -39,5 +41,17 @@ public class UserService {
 
     public Mono<Void> delete(Long id) {
         return userRepository.deleteById(id);
+    }
+
+    private void validate(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is required");
+        }
+        if (user.getName() == null || user.getName().isBlank()) {
+            throw new IllegalArgumentException("User name is required");
+        }
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new IllegalArgumentException("User email is required");
+        }
     }
 }
